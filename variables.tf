@@ -1,56 +1,60 @@
 variable "env" {
-  type = string
-  description = "Ambiente de criação do cluster"
+  type        = string
+  description = "Ambiente do cluster (dev, qa, stg, prd)"
 
   validation {
-    condition = length (var.env) < 4
-    error_message = "O tamanho do nome do ambiente deve ter 3 letras"
+    condition     = length(var.env) <= 4
+    error_message = "O nome do ambiente deve ter no máximo 4 caracteres."
   }
 }
 
 variable "project_name" {
-  type = string
-  description = "Prefixo usado em cada projeto"
+  type        = string
+  description = "Nome do projeto — usado como sufixo nos recursos"
+}
+
+variable "resource_group_name" {
+  type        = string
+  description = "Resource Group onde o cluster será criado"
+}
+
+variable "location" {
+  type        = string
+  description = "Região Azure"
+  default     = "eastus"
+}
+
+variable "kubernetes_version" {
+  type        = string
+  description = "Versão do Kubernetes"
+  default     = null
 }
 
 variable "node_pool_name" {
-  type = string
-  description = "Nome do nó usado pelos agents do K8s"
+  type        = string
+  description = "Nome do node pool padrão"
+  default     = "default"
 }
 
-variable "client_id" {
-  type = string
-  description = "RBAC Client ID gerado"
+variable "node_count" {
+  type        = number
+  description = "Quantidade de nós no pool padrão"
+  default     = 2
 }
 
-variable "client_secret" {
-  type = string
-  description = "RBAC Secret gerado"
+variable "vm_size" {
+  type        = string
+  description = "Tamanho das VMs do node pool"
+  default     = "Standard_DS2_v2"
 }
 
-variable "k8s_node_vm_size" {
-  type = string
-  description = "Tamanho dos nos usados no cluster k8s"
+variable "os_disk_size_gb" {
+  type        = number
+  description = "Tamanho do disco OS dos nós em GB"
+  default     = 50
 }
 
-variable "k8s_node_count" {
-  type = number
-  description = "Quantidade de nos usados no cluster k8s"
-}
-
-variable "k8s_node_os_disk_size" {
-  type = number
-  description = "Tamanho dos discos dos nos usados no cluster k8s"
-}
-
-variable "enable_prometheus" {
-  type = bool
-  description = "Habilitar o Deploy do Prometheus"
-  default = true
-}
-
-variable "enable_grafana" {
-  type = bool
-  description = "Habilitar o Deploy do Grafana"
-  default = true
+variable "tags" {
+  type    = map(string)
+  default = {}
 }
